@@ -3,11 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
-# Load dataset
+
 df = pd.read_csv("Mall_Customers.csv")
 
-# Drop non-informative columns
+
 data = df[['Age', 'Annual Income (k$)', 'Spending Score (1-100)']]
 
 # Standardize the features
@@ -22,7 +23,7 @@ for k in K:
     kmeans.fit(scaled_data)
     inertia.append(kmeans.inertia_)
 
-# Plot the Elbow Curve
+
 plt.figure(figsize=(8, 5))
 plt.plot(K, inertia, 'bo-', markersize=8)
 plt.xlabel('Number of Clusters (k)')
@@ -36,11 +37,8 @@ optimal_k = 5
 kmeans = KMeans(n_clusters=optimal_k, random_state=42)
 clusters = kmeans.fit_predict(scaled_data)
 
-# Add cluster labels to original DataFrame
-df['Cluster'] = clusters
 
-# Visualize the clusters (2D using first two PCA-like dimensions)
-from sklearn.decomposition import PCA
+df['Cluster'] = clusters
 
 pca = PCA(n_components=2)
 reduced_data = pca.fit_transform(scaled_data)
